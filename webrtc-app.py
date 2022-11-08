@@ -3,6 +3,7 @@ from streamlit_webrtc import webrtc_streamer, VideoProcessorBase, RTCConfigurati
 import av
 import threading
 from utils import mediapipepose
+import time
 
 mpipe = mediapipepose()
 RTC_CONFIGURATION = RTCConfiguration(
@@ -32,8 +33,9 @@ if task_name == task_list[0]:
             if self.style != new_style:
                 with self.model_lock:
                     self.style = new_style
-
+        @st.cache(suppress_st_warning=True)
         def recv(self, frame):
+            
             # img = frame.to_ndarray(format="bgr24")
             img = frame.to_image()
             if self.style == style_list[1]:
@@ -41,6 +43,7 @@ if task_name == task_list[0]:
                 
             if self.style == style_list[2]:
                 try:
+                    time.sleep(2)
                     img = frame.to_ndarray(format="bgr24")
                     img = mpipe.processImage(img)
                     return av.VideoFrame.from_ndarray(img, format="bgr24")
