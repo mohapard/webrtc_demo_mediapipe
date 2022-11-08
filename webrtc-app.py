@@ -33,7 +33,7 @@ if task_name == task_list[0]:
             if self.style != new_style:
                 with self.model_lock:
                     self.style = new_style
-        @st.cache(suppress_st_warning=True)
+        @st.cache(allow_output_mutation=True)
         def recv(self, frame):
             
             # img = frame.to_ndarray(format="bgr24")
