@@ -4,7 +4,7 @@ import av
 import threading
 from utils import mediapipepose
 import time
-
+@st.cache(allow_output_mutation=True)
 mpipe = mediapipepose()
 RTC_CONFIGURATION = RTCConfiguration(
     {"iceServers": [{"urls": ["stun:stun.l.google.com:19302"]}]}
@@ -33,7 +33,7 @@ if task_name == task_list[0]:
             if self.style != new_style:
                 with self.model_lock:
                     self.style = new_style
-        @st.cache(allow_output_mutation=True)
+       
         def recv(self, frame):
             
             # img = frame.to_ndarray(format="bgr24")
@@ -45,6 +45,7 @@ if task_name == task_list[0]:
                 try:
                     time.sleep(2)
                     img = frame.to_ndarray(format="bgr24")
+                    @st.cache(allow_output_mutation=True)
                     img = mpipe.processImage(img)
                     return av.VideoFrame.from_ndarray(img, format="bgr24")
                 except Exception as e:
